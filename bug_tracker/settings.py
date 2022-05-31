@@ -49,6 +49,7 @@ SUPPORT_APPS = [
 
 MY_APPS = [
     "users",
+    "comments",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + SUPPORT_APPS + MY_APPS
