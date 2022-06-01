@@ -17,16 +17,21 @@ from django.contrib import admin
 from django.urls import path
 from django.conf.urls import url, include
 from django.contrib import admin
-from accounts import urls as urls_accounts
-from tickets import urls as urls_tickets
-from search import urls as urls_search
+
+""" from accounts import urls as urls_accounts """
+from ticket import urls as urls_tickets
+
+""" from search import urls as urls_search
 from tickets.views import all_tickets, one_ticket
 from home.views import index
 from django.conf import settings
-from payment.views import payment_form, checkout
-from django.conf.urls.static import static 
+from payment.views import payment_form, checkout """
+from django.conf.urls.static import static
+from django.urls import path, include
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    url(r'^tickets/', include(urls_tickets)),
+    path("admin/", admin.site.urls),
+    path("api/", include("users.urls")),
+    path("api/", include("comments.urls")),
+    url(r"^tickets/", include(urls_tickets)),
 ]

@@ -9,9 +9,12 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
-
+from os import getenv
 from pathlib import Path
-import os
+import dj_database_url
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,12 +24,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("SECRET_KEY")
+SECRET_KEY = getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["127.0.0.1", "localhost", "dj-capstone.herokuapp.com"]
 
 
 # Application definition
@@ -37,7 +40,7 @@ DJANGO_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "ticket"
+    
 ]
 
 SUPPORT_APPS = [
@@ -45,7 +48,12 @@ SUPPORT_APPS = [
     "rest_framework.authtoken",
 ]
 
-MY_APPS = []
+MY_APPS = [
+    "users",
+    "projects",
+    "ticket",
+    "comments",
+]
 
 INSTALLED_APPS = DJANGO_APPS + SUPPORT_APPS + MY_APPS
 
@@ -90,6 +98,14 @@ DATABASES = {
     }
 }
 
+DATABASE_URL = getenv("DATABASE_URL")
+
+if DATABASE_URL:
+    db_url = dj_database_url.config(
+        default=DATABASE_URL, conn_max_age=500, ssl_require=True
+    )
+    DATABASES["default"].update(db_url)
+    DEBUG = False
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -131,3 +147,5 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+AUTH_USER_MODEL = "users.Users"
