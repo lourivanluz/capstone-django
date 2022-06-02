@@ -50,41 +50,8 @@ class AssignTicketUserSerializer(serializers.Serializer):
 
         return ticket
 
-class TicketAddSerializer(serializers.ModelSerializer):
-    # assigned = serializers.ListField(child=serializers.UUIDField())
-    # user_id = serializers.UUIDField()
 
-    class Meta:
-        model = Tickets
-        fields = (
-            "id",
-            "project",
-            "author",
-            "category",
-            "description",
-            "test_steps",
-            "severity",
-            "frequency",
-            "status",
-            "deadline",
-            "assigned",
-        )
-
-        extra_kwargs = {
-            "id": {"required": False},
-            "project": {"required": False},
-            "author": {"required": False},
-            "category": {"required": False},
-            "description": {"required": False},
-            "test_steps": {"required": False},
-            "severity": {"required": False},
-            "frequency": {"required": False},
-            "status": {"required": False},
-            "deadline": {"required": False},
-        }
-
-
-class TicketPatchSerializer(TicketAddSerializer):
+class TicketPatchSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tickets
         fields = (

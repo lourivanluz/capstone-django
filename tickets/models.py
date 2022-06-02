@@ -6,15 +6,15 @@ SEVERITY_CHOICES = [("low", "Low"), ("moderate", "Moderate"), ("critical", "Crit
 
 CATEGORY_CHOICES = [
     ("flaw", "Flaw"),
-    ("improvemente", "Improvemente"),
+    ("improvement", "Improvement"),
     ("suggestion", "Suggestion"),
 ]
 
 
 FREQUENCY_CHOICES = [
-    ("Constact", "Constact"),
-    ("Periodic", "Periodic"),
-    ("Irreproducible", "Irreproducible"),
+    ("constant", "Constant"),
+    ("periodic", "Periodic"),
+    ("irreproducible", "Irreproducible"),
 ]
 
 STATUS_CHOICES = [
