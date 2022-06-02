@@ -88,9 +88,6 @@ class TicketPatchSerializer(TicketAddSerializer):
     class Meta:
         model = Tickets
         fields = (
-            "id",
-            "project",
-            "author",
             "category",
             "description",
             "test_steps",
@@ -98,13 +95,9 @@ class TicketPatchSerializer(TicketAddSerializer):
             "frequency",
             "status",
             "deadline",
-            "assigned",
         )
 
         extra_kwargs = {
-            "id": {"required": False},
-            "project": {"required": False},
-            "author": {"required": False},
             "category": {"required": False},
             "description": {"required": False},
             "test_steps": {"required": False},
@@ -112,5 +105,4 @@ class TicketPatchSerializer(TicketAddSerializer):
             "frequency": {"required": False},
             "status": {"required": False},
             "deadline": {"required": False},
-            "assigned": {"required": False},
         }

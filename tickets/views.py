@@ -2,6 +2,7 @@ from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.request import Request
 from rest_framework.response import Response
+from rest_framework.status import HTTP_200_OK
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.exceptions import ValidationError, NotFound
 
@@ -14,6 +15,7 @@ from tickets.serializers import (
 from projects.models import Projects
 from tickets.models import Tickets
 from projects.permissions import IsInProject
+from tickets.permissions import IsInTicket
 
 
 class TicketView(generics.ListCreateAPIView):
@@ -42,7 +44,7 @@ class TicketView(generics.ListCreateAPIView):
 
 class TicketAddView(APIView):
     authentication_classes = [TokenAuthentication]
-    permission_classes = [IsInProject]
+    permission_classes = [IsInProject, IsInTicket]
 
     def post(self, request, project_id, ticket_id):
         try:
@@ -53,11 +55,14 @@ class TicketAddView(APIView):
 
             ticket.assigned.add(user)
 
-            return Response({"message": f"{user.username} was added to ticket {ticket.id}"}, 200)
+            return Response(
+                {"message": f"{user.username} was added to ticket {ticket.id}"},
+                HTTP_200_OK,
+            )
 
         except ValidationError as e:
             return Response(e.detail, e.status_code)
-        
+
         except NotFound as e:
             return Response({"detail": e.detail}, e.status_code)
 
@@ -72,4 +77,4 @@ class TicketAddView(APIView):
         ticket.update(**serializer.validated_data)
 
         serializer = TicketAddSerializer(ticket.first())
-        return Response(serializer.data, 200)
+        return Response(serializer.data, HTTP_200_OK)
