@@ -15,12 +15,12 @@ from tickets.serializers import (
 )
 from projects.models import Projects
 from tickets.models import Tickets
-from tickets.permissions import isMember
+from projects.permissions import IsInProject
 
 
 class TicketView(generics.ListCreateAPIView):
     authentication_classes = [TokenAuthentication]
-    permission_classes = [isMember]
+    permission_classes = [IsInProject]
     queryset = Tickets.objects
     serializer_class = TicketSerializer
 
@@ -43,6 +43,9 @@ class TicketView(generics.ListCreateAPIView):
 
 
 class TicketAddView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsInProject]
+
     def post(self, request: Request, **kwargs):
 
         serializer = TicketAddSerializer(data=request.data)

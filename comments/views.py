@@ -4,11 +4,13 @@ from rest_framework.exceptions import NotFound
 
 from comments.models import Comments
 from comments.serializers import CommentsSerializer
+from projects.permissions import IsInProject
 from tickets.models import Tickets
 
 class CommentsView(generics.ListCreateAPIView):
     serializer_class = CommentsSerializer
     authentication_classes = [TokenAuthentication]
+    permission_classes = [IsInProject]
 
     def perform_create(self, serializer):
         try:
