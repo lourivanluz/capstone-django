@@ -49,6 +49,7 @@ SUPPORT_APPS = [
 
 MY_APPS = [
     "users",
+    "projects",
     "tickets",
     "comments",
 ]
