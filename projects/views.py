@@ -1,8 +1,11 @@
 from rest_framework import generics
 from rest_framework.authentication import TokenAuthentication
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.exceptions import ValidationError, NotFound
 
 from projects.models import Projects
-from projects.serializers import ProjectsSerializer
+from projects.serializers import AddProjectUserSerializer, ProjectsSerializer
 
 class ProjectViews(generics.ListCreateAPIView):
     serializer_class = ProjectsSerializer
@@ -13,3 +16,23 @@ class ProjectViews(generics.ListCreateAPIView):
 
     def get_queryset(self):
             return Projects.objects.filter(users=self.request.user.id)
+
+class AddProjectUserView(APIView):
+    serializer_class = AddProjectUserSerializer
+    
+    def post(self, request, project_id):
+        try:
+            serializer = self.serializer_class(data=request.data)
+
+            user = serializer.validate_user()
+            project = serializer.validate_project(project_id)
+
+            project.users.add(user)
+
+            return Response({"message": f"{user.username} was added to {project.title}"}, 200)
+
+        except ValidationError as e:
+            return Response(e.detail, e.status_code)
+        
+        except NotFound as e:
+            return Response({"detail": e.detail}, e.status_code)
