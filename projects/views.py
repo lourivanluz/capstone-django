@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError, NotFound
 
 from projects.models import Projects
+from projects.permissions import IsInProject
 from projects.serializers import AddProjectUserSerializer, ProjectsSerializer
 
 class ProjectViews(generics.ListCreateAPIView):
@@ -19,13 +20,15 @@ class ProjectViews(generics.ListCreateAPIView):
 
 class AddProjectUserView(APIView):
     serializer_class = AddProjectUserSerializer
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsInProject]
     
     def post(self, request, project_id):
         try:
             serializer = self.serializer_class(data=request.data)
 
             user = serializer.validate_user()
-            project = serializer.validate_project(project_id)
+            project = Projects.objects.filter(id=project_id).get()
 
             project.users.add(user)
 

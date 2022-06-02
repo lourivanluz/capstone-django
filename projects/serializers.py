@@ -19,10 +19,3 @@ class AddProjectUserSerializer(serializers.Serializer):
         except:
             raise NotFound(detail="user not found")
         return user
-
-    def validate_project(self, project_id):
-        try:
-            project = Projects.objects.filter(id=project_id).get()
-        except:
-            raise NotFound(detail="project not found")
-        return project
