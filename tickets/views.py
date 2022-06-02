@@ -1,14 +1,12 @@
-from django.shortcuts import render
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework.status import HTTP_201_CREATED
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.exceptions import NotFound
-
+from rest_framework.exceptions import ValidationError, NotFound
 
 from tickets.serializers import (
+    AssignTicketUserSerializer,
     TicketSerializer,
     TicketAddSerializer,
     TicketPatchSerializer,
@@ -46,20 +44,22 @@ class TicketAddView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsInProject]
 
-    def post(self, request: Request, **kwargs):
-
-        serializer = TicketAddSerializer(data=request.data)
-        # serializer.is_valid(True)
-
+    def post(self, request, project_id, ticket_id):
         try:
-            ticket: Tickets = Tickets.objects.filter(id=kwargs["ticket_id"]).get()
+            serializer = AssignTicketUserSerializer(data=request.data)
 
-        except:
-            return Response({"error": "ticket not found"})
-        ticket.assigned.add(request.data["assigned"])
-        ticket.save()
-        serializer = TicketAddSerializer(ticket)
-        return Response(serializer.data, HTTP_201_CREATED)
+            user = serializer.validate_user_project(project_id)
+            ticket = serializer.validate_ticket(ticket_id)
+
+            ticket.assigned.add(user)
+
+            return Response({"message": f"{user.username} was added to ticket {ticket.id}"}, 200)
+
+        except ValidationError as e:
+            return Response(e.detail, e.status_code)
+        
+        except NotFound as e:
+            return Response({"detail": e.detail}, e.status_code)
 
     def patch(self, request: Request, **kwargs):
         serializer = TicketPatchSerializer(data=request.data)
