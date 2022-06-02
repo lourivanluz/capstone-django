@@ -8,7 +8,12 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.exceptions import NotFound
 
 
-from tickets.serializers import ProjectSerializer, TicketSerializer, TicketAddSerializer
+from tickets.serializers import (
+    ProjectSerializer,
+    TicketSerializer,
+    TicketAddSerializer,
+    TicketPatchSerializer,
+)
 from users.models import Users
 from tickets.models import Projects, Tickets
 from tickets.permissions import isMember
@@ -53,6 +58,19 @@ class TicketAddView(APIView):
         ticket.save()
         serializer = TicketAddSerializer(ticket)
         return Response(serializer.data, HTTP_201_CREATED)
+
+    def patch(self, request: Request, **kwargs):
+        serializer = TicketPatchSerializer(data=request.data)
+        serializer.is_valid(True)
+        try:
+            ticket = Tickets.objects.filter(id=kwargs["ticket_id"])
+
+        except:
+            return Response({"error": "notfound"})
+        ticket.update(**serializer.validated_data)
+
+        serializer = TicketAddSerializer(ticket.first())
+        return Response(serializer.data, 200)
 
 
 """ class TicketGetView(generics.ListAPIView):

@@ -56,7 +56,25 @@ class TicketAddSerializer(serializers.ModelSerializer):
             "deadline",
             "responsibles",
         )
-        read_only_fields = (
+
+        extra_kwargs = {
+            "id": {"required": False},
+            "project": {"required": False},
+            "author": {"required": False},
+            "category": {"required": False},
+            "description": {"required": False},
+            "test_steps": {"required": False},
+            "severity": {"required": False},
+            "frequency": {"required": False},
+            "status": {"required": False},
+            "deadline": {"required": False},
+        }
+
+
+class TicketPatchSerializer(TicketAddSerializer):
+    class Meta:
+        model = Tickets
+        fields = (
             "id",
             "project",
             "author",
@@ -67,4 +85,19 @@ class TicketAddSerializer(serializers.ModelSerializer):
             "frequency",
             "status",
             "deadline",
+            "responsibles",
         )
+
+        extra_kwargs = {
+            "id": {"required": False},
+            "project": {"required": False},
+            "author": {"required": False},
+            "category": {"required": False},
+            "description": {"required": False},
+            "test_steps": {"required": False},
+            "severity": {"required": False},
+            "frequency": {"required": False},
+            "status": {"required": False},
+            "deadline": {"required": False},
+            "responsibles": {"required": False},
+        }
