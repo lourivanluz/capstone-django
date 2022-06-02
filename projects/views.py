@@ -31,8 +31,9 @@ class AddProjectUserView(APIView):
             project = Projects.objects.filter(id=project_id).get()
 
             project.users.add(user)
+            serializer = ProjectsSerializer(project)
 
-            return Response({"message": f"{user.username} was added to {project.title}"}, 200)
+            return Response(serializer.data, 200)
 
         except ValidationError as e:
             return Response(e.detail, e.status_code)

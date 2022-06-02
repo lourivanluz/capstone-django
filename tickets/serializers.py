@@ -4,14 +4,17 @@ from rest_framework.exceptions import NotFound, ValidationError
 from projects.models import Projects
 from tickets.models import Tickets
 from users.models import Users
+from users.serializers import UsersSerializer
 
 
 class TicketSerializer(serializers.ModelSerializer):
+    assigned = UsersSerializer(read_only=True, many=True)
+    author = UsersSerializer(read_only=True)
+
     class Meta:
         model = Tickets
         fields = (
             "id",
-            "project",
             "author",
             "category",
             "description",
@@ -20,11 +23,11 @@ class TicketSerializer(serializers.ModelSerializer):
             "frequency",
             "status",
             "deadline",
+            "assigned",
         )
         read_only_fields = (
             "id",
-            "author",
-            "project",
+            "deadline",
         )
 
 class AssignTicketUserSerializer(serializers.Serializer):

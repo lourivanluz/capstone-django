@@ -1,13 +1,17 @@
 from rest_framework import serializers
 
+from users.serializers import UsersSerializer
 from projects.models import Projects
 from users.models import Users
 from rest_framework.exceptions import NotFound
 
+
 class ProjectsSerializer(serializers.ModelSerializer):
+    users = UsersSerializer(read_only=True, many=True)
+
     class Meta:
         model = Projects
-        fields = ('id', 'title', 'description')
+        fields = ('id', 'title', 'description', 'users')
 
 class AddProjectUserSerializer(serializers.Serializer):
     email = serializers.EmailField()
