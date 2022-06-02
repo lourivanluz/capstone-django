@@ -36,7 +36,6 @@ def loguin(request: Request):
     serializer.is_valid(True)
 
     user: Users = authenticate(**serializer.validated_data)
-
     if not user:
         return Response({"details": "invalide credentials"}, HTTP_400_BAD_REQUEST)
 
