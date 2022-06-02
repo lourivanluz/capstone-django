@@ -9,7 +9,6 @@ from rest_framework.exceptions import ValidationError, NotFound
 from tickets.serializers import (
     AssignTicketUserSerializer,
     TicketSerializer,
-    TicketAddSerializer,
     TicketPatchSerializer,
 )
 from projects.models import Projects
@@ -71,10 +70,13 @@ class TicketAddView(APIView):
         serializer.is_valid(True)
         try:
             ticket = Tickets.objects.filter(id=kwargs["ticket_id"])
+            ticket.update(**serializer.validated_data)
 
-        except:
-            return Response({"error": "notfound"})
-        ticket.update(**serializer.validated_data)
+            serializer = TicketSerializer(ticket.first())
+            return Response(serializer.data, HTTP_200_OK)
 
-        serializer = TicketAddSerializer(ticket.first())
-        return Response(serializer.data, HTTP_200_OK)
+        except ValidationError as e:
+            return Response(e.detail, e.status_code)
+
+        except NotFound as e:
+            return Response({"detail": e.detail}, e.status_code)
