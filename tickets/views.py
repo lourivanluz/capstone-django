@@ -56,7 +56,7 @@ class TicketAddView(APIView):
 
         except:
             return Response({"error": "ticket not found"})
-        ticket.responsibles.add(request.data["responsibles"])
+        ticket.assigned.add(request.data["assigned"])
         ticket.save()
         serializer = TicketAddSerializer(ticket)
         return Response(serializer.data, HTTP_201_CREATED)
