@@ -15,7 +15,7 @@ em produção, recursos necessários para a garantia de qualidade de qualquer pr
   - Qualquer usuário no projeto pode adicionar novos usuários.
 - Criação de tickets:
   - Qualquer usuário no projeto pode criar tickets;
-  - Tickets possuem várias informações importantes, como grau de severidade do erro, módulo em que foi encontrado, passos para a reprodução e o tempo estimado para resolvê-lo.
+  - Tickets possuem várias informações importantes, como grau de severidade do erro, passos para a reprodução e a frequência em que ocorre.
 - Adição de usuários à tickets:
   - Qualquer usuário no projeto pode adicionar colegas de projeto à um ticket;
   - Vários usuários podem ser designados ao mesmo ticket.
