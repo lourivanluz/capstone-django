@@ -4,6 +4,7 @@ import uuid
 from tickets.models import Tickets
 from users.models import Users
 
+
 class Comments(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     ticket = models.ForeignKey(Tickets, on_delete=models.RESTRICT)
