@@ -3,7 +3,7 @@ from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework.status import HTTP_201_CREATED
+from rest_framework.status import HTTP_201_CREATED, HTTP_200_OK
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.exceptions import NotFound
 
@@ -16,6 +16,7 @@ from tickets.serializers import (
 from projects.models import Projects
 from tickets.models import Tickets
 from projects.permissions import IsInProject
+from tickets.permissions import IsInTicket
 
 
 class TicketView(generics.ListCreateAPIView):
@@ -44,12 +45,12 @@ class TicketView(generics.ListCreateAPIView):
 
 class TicketAddView(APIView):
     authentication_classes = [TokenAuthentication]
-    permission_classes = [IsInProject]
+    permission_classes = [IsInProject, IsInTicket]
 
     def post(self, request: Request, **kwargs):
 
         serializer = TicketAddSerializer(data=request.data)
-        # serializer.is_valid(True)
+        serializer.is_valid(True)
 
         try:
             ticket: Tickets = Tickets.objects.filter(id=kwargs["ticket_id"]).get()
@@ -72,4 +73,4 @@ class TicketAddView(APIView):
         ticket.update(**serializer.validated_data)
 
         serializer = TicketAddSerializer(ticket.first())
-        return Response(serializer.data, 200)
+        return Response(serializer.data, HTTP_200_OK)
