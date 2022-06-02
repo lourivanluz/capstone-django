@@ -24,7 +24,7 @@ em produção, recursos necessários para a garantia de qualidade de qualquer pr
 - Alteração de status de tickets:
   - Apenas usários designados à um ticket podem alterar seu status e demais informações.
 
-## Funcionalidades Adicionais
+## Funcionalidades Futuras
 
 - Filtragem de tickets por tipo, usuário, data de criação, módulo, status, comentários e qualquer outro dado importante;
 - Alterações nos tickets, como designações de usuários e alterações de status, são automaticamente registradas nos comentários;
