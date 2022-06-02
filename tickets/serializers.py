@@ -27,7 +27,7 @@ class TicketSerializer(serializers.ModelSerializer):
 
 
 class TicketAddSerializer(serializers.ModelSerializer):
-    # responsibles = serializers.ListField(child=serializers.UUIDField())
+    # assigned = serializers.ListField(child=serializers.UUIDField())
     # user_id = serializers.UUIDField()
 
     class Meta:
@@ -43,7 +43,7 @@ class TicketAddSerializer(serializers.ModelSerializer):
             "frequency",
             "status",
             "deadline",
-            "responsibles",
+            "assigned",
         )
 
         extra_kwargs = {
@@ -74,7 +74,7 @@ class TicketPatchSerializer(TicketAddSerializer):
             "frequency",
             "status",
             "deadline",
-            "responsibles",
+            "assigned",
         )
 
         extra_kwargs = {
@@ -88,5 +88,5 @@ class TicketPatchSerializer(TicketAddSerializer):
             "frequency": {"required": False},
             "status": {"required": False},
             "deadline": {"required": False},
-            "responsibles": {"required": False},
+            "assigned": {"required": False},
         }
