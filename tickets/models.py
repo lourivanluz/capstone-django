@@ -46,7 +46,7 @@ class Tickets(models.Model):
         "users.Users", on_delete=models.CASCADE, related_name="tickets_owner", null=True
     )
 
-    responsibles = models.ManyToManyField(
+    assigned = models.ManyToManyField(
         "users.Users",
         related_name="tickets",
     )
