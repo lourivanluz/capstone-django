@@ -37,7 +37,7 @@ class Tickets(models.Model):
     severity = models.CharField(max_length=255, choices=SEVERITY_CHOICES, null=False)
     frequency = models.CharField(max_length=255, choices=FREQUENCY_CHOICES, null=False)
     status = models.CharField(max_length=255, choices=STATUS_CHOICES, null=False)
-    deadline = models.DateField(default="2020-03-15")
+    deadline = models.DateField(null=True)
 
     project = models.ForeignKey(
         "projects.Projects", on_delete=models.CASCADE, related_name="tickets", null=True
