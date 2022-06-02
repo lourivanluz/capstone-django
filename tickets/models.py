@@ -1,10 +1,5 @@
-from typing import Tuple
 from django.db import models
 import uuid
-import tickets
-
-
-from users.models import Users
 
 
 SEVERITY_CHOICES = [("low", "Low"), ("moderate", "Moderate"), ("critical", "Critical")]
@@ -33,14 +28,6 @@ STATUS_CHOICES = [
 ]
 
 
-class Projects(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    title = models.CharField(max_length=255)
-    description = models.TextField(blank=False)
-
-    users = models.ManyToManyField(Users, related_name="projects")
-
-
 class Tickets(models.Model):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -53,7 +40,7 @@ class Tickets(models.Model):
     deadline = models.DateField(default="2020-03-15")
 
     project = models.ForeignKey(
-        "tickets.Projects", on_delete=models.CASCADE, related_name="tickets", null=True
+        "projects.Projects", on_delete=models.CASCADE, related_name="tickets", null=True
     )
     author = models.ForeignKey(
         "users.Users", on_delete=models.CASCADE, related_name="tickets_owner", null=True

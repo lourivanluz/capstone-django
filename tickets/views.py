@@ -9,13 +9,12 @@ from rest_framework.exceptions import NotFound
 
 
 from tickets.serializers import (
-    ProjectSerializer,
     TicketSerializer,
     TicketAddSerializer,
     TicketPatchSerializer,
 )
-from users.models import Users
-from tickets.models import Projects, Tickets
+from projects.models import Projects
+from tickets.models import Tickets
 from tickets.permissions import isMember
 
 
@@ -53,7 +52,7 @@ class TicketAddView(APIView):
             ticket: Tickets = Tickets.objects.filter(id=kwargs["ticket_id"]).get()
 
         except:
-            return Response({"error": "notfound"})
+            return Response({"error": "ticket not found"})
         ticket.responsibles.add(request.data["responsibles"])
         ticket.save()
         serializer = TicketAddSerializer(ticket)
@@ -71,34 +70,3 @@ class TicketAddView(APIView):
 
         serializer = TicketAddSerializer(ticket.first())
         return Response(serializer.data, 200)
-
-
-""" class TicketGetView(generics.ListAPIView):
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [isMember]
-    queryset = Tickets.objects
-    serializer_class = TicketSerializer
-
-    def get(self, request: Request, *args, **kwargs):
-        self.queryset = request.user.tickets.all()
-        return super().get(request, *args, **kwargs) """
-
-
-class ProjectView(generics.ListCreateAPIView):
-    authentication_classes = [TokenAuthentication]
-    # permission_classes = []
-    queryset = Projects.objects.all
-    serializer_class = ProjectSerializer
-
-    def create(self, request: Request):
-        user: Users = request.user
-
-        serialiser = ProjectSerializer(data=request.data)
-        serialiser.is_valid(raise_exception=True)
-
-        project: Projects = Projects.objects.create(**serialiser.validated_data)
-        project.users.add(user)
-        project.save()
-        serialiser = ProjectSerializer(project)
-
-        return Response(serialiser.data, HTTP_201_CREATED)

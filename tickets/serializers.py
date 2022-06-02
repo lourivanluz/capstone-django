@@ -1,18 +1,7 @@
 from rest_framework import serializers
 
 
-from tickets.models import Tickets, Projects
-
-
-class ProjectSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Projects
-        fields = (
-            "id",
-            "title",
-            "description",
-        )
-        read_only_fields = ("id",)
+from tickets.models import Tickets
 
 
 class TicketSerializer(serializers.ModelSerializer):
