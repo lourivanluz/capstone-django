@@ -15,8 +15,9 @@ class IsInTicket(BasePermission):
         except:
             raise NotFound(detail="ticket not found")
 
-        if request.method in restrict_methods and (
+        if not request.method in restrict_methods or (
             request.user in ticket.assigned.all() or request.user.id == ticket.author.id
         ):
             return True
+
         return False

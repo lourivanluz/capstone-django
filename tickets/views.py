@@ -54,10 +54,8 @@ class TicketAddView(APIView):
 
             ticket.assigned.add(user)
 
-            return Response(
-                {"message": f"{user.username} was added to ticket {ticket.id}"},
-                HTTP_200_OK,
-            )
+            serializer = TicketSerializer(ticket)
+            return Response(serializer.data, HTTP_200_OK)
 
         except ValidationError as e:
             return Response(e.detail, e.status_code)
