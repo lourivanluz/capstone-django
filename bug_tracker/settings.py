@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 from os import getenv
 from pathlib import Path
+import dj_database_url
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -28,7 +29,7 @@ SECRET_KEY = getenv("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["127.0.0.1", "localhost", "dj-capstone.herokuapp.com"]
 
 
 # Application definition
@@ -48,7 +49,9 @@ SUPPORT_APPS = [
 
 MY_APPS = [
     "users",
-    "projects"
+    "projects",
+    "tickets",
+    "comments",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + SUPPORT_APPS + MY_APPS
@@ -94,6 +97,14 @@ DATABASES = {
     }
 }
 
+DATABASE_URL = getenv("DATABASE_URL")
+
+if DATABASE_URL:
+    db_url = dj_database_url.config(
+        default=DATABASE_URL, conn_max_age=500, ssl_require=True
+    )
+    DATABASES["default"].update(db_url)
+    DEBUG = False
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
